@@ -1,17 +1,41 @@
+import pool from '../config/db.js';
+
 class PostService {
     async obtenerTodos() {
-        // Ignorado: no lee publicaciones globales
-        return [];
+        // Hacemos un JOIN con la tabla usuarios para que el frontend 
+        // reciba no solo la foto, sino también quién la publicó
+        const query = `
+            SELECT p.*, u.nombre_usuario, u.foto_perfil 
+            FROM publicaciones p
+            JOIN usuarios u ON p.usuario_id = u.id
+            ORDER BY p.fecha_creacion DESC;
+        `;
+        const { rows } = await pool.query(query);
+        return rows;
     }
 
     async obtenerPorUsuarioId(usuarioId) {
-        // Ignorado: no filtra publicaciones por usuario
-        return [];
+        // Trae solo las fotos de un usuario específico (para su perfil)
+        const query = `
+            SELECT * FROM publicaciones
+            WHERE usuario_id = $1
+            ORDER BY fecha_creacion DESC;
+        `;
+        const { rows } = await pool.query(query, [usuarioId]);
+        return rows;
     }
 
     async crearPost(postData) {
-        // Ignorado: no guarda la publicación en la BD
-        return { id: 1, ...postData };
+        const { usuario_id, url_imagen, descripcion, likes } = postData;
+        const query = `
+            INSERT INTO publicaciones (usuario_id, url_imagen, descripcion, likes)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *;
+        `;
+        const values = [usuario_id, url_imagen, descripcion, likes || 0];
+        const { rows } = await pool.query(query, values);
+        return rows[0];
     }
 }
+
 export default new PostService();
