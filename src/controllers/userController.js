@@ -3,7 +3,6 @@ import postService from '../services/postService.js';
 
 export const obtenerPerfil = async (req, res) => {
     try {
-        // req.user viene cargado desde el authMiddleware tras verificar el JWT
         const usuarioId = req.user.id; 
 
         const perfil = await userService.obtenerPerfilCompleto(usuarioId);

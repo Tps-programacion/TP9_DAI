@@ -2,7 +2,6 @@ import pool from '../config/db.js';
 
 class UserService {
     async obtenerPerfilCompleto(usuarioId) {
-        // Seleccionamos todo MENOS la contraseña
         const query = `
             SELECT id, nombre_usuario, nombre_completo, email, foto_perfil, biografia
             FROM usuarios

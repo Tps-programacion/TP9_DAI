@@ -28,7 +28,7 @@ class AuthService {
         return rows[0];
     }
 
-    // Sirve para el Login: buscamos toda la data del usuario a partir de su email
+    
     async buscarPorEmail(email) {
         const query = 'SELECT * FROM usuarios WHERE email = $1';
         const { rows } = await pool.query(query, [email]);

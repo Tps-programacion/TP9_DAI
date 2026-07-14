@@ -2,8 +2,7 @@ import pool from '../config/db.js';
 
 class PostService {
     async obtenerTodos() {
-        // Hacemos un JOIN con la tabla usuarios para que el frontend 
-        // reciba no solo la foto, sino también quién la publicó
+
         const query = `
             SELECT p.*, u.nombre_usuario, u.foto_perfil 
             FROM publicaciones p
